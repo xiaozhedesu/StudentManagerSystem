@@ -14,6 +14,7 @@ public class StudentService {
 
     /**
      * 从指定文件读取学生数据
+     *
      * @throws IOException 发生IO错误时抛出
      */
     public void saveStudentList() throws IOException {
@@ -24,6 +25,7 @@ public class StudentService {
 
     /**
      * 存储学生数据到指定区域
+     *
      * @throws IOException 发生IO错误时抛出
      */
     @SuppressWarnings("unchecked")
@@ -37,5 +39,14 @@ public class StudentService {
         } catch (ClassNotFoundException e) {
             this.students = new ArrayList<>();
         }
+    }
+
+    /**
+     * 获取学生数据
+     *
+     * @return 保存了学生数据的新数组
+     */
+    public ArrayList<Student> getStudentList() {
+        return new ArrayList<>(students);
     }
 }
