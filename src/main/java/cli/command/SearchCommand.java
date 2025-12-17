@@ -3,7 +3,7 @@ package main.java.cli.command;
 import main.java.model.Student;
 import main.java.service.StudentService;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 搜索指令
@@ -15,13 +15,13 @@ public class SearchCommand extends AbstractCommand implements Command {
 
     @Override
     public void execute() {
-        ArrayList<Student> students = studentService.getStudentList();
+        HashMap<String, Student> students = studentService.getStudentList();
         if (students.isEmpty()) {
             System.out.println("没有学生信息。");
             return;
         }
         System.out.println("一共有" + students.size() + "个学生信息：");
-        for (Student student : students) {
+        for (Student student : students.values()) {
             System.out.println(student);
         }
     }

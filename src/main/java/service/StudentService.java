@@ -1,16 +1,18 @@
 package main.java.service;
 
+import main.java.exception.InvalidValueException;
+import main.java.exception.StudentIdAlreadyExistsException;
 import main.java.model.Student;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class StudentService {
     private static final Path STUDENT_DATA_FILE = Paths.get("./student.txt");
-    private ArrayList<Student> students;
+    private HashMap<String, Student> students;
 
     /**
      * 从指定文件读取学生数据
@@ -31,13 +33,13 @@ public class StudentService {
     @SuppressWarnings("unchecked")
     public void loadStudentList() throws IOException {
         if (!Files.exists(STUDENT_DATA_FILE)) {
-            this.students = new ArrayList<>();
+            this.students = new HashMap<>();
             return;
         }
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(STUDENT_DATA_FILE.toFile()))) {
-            this.students = (ArrayList<Student>) ois.readObject();
+            this.students = (HashMap<String, Student>) ois.readObject();
         } catch (ClassNotFoundException e) {
-            this.students = new ArrayList<>();
+            this.students = new HashMap<>();
         }
     }
 
@@ -46,7 +48,21 @@ public class StudentService {
      *
      * @return 保存了学生数据的新数组
      */
-    public ArrayList<Student> getStudentList() {
-        return new ArrayList<>(students);
+    public HashMap<String, Student> getStudentList() {
+        return new HashMap<>(students);
+    }
+
+    public void addStudent(Student student) throws StudentIdAlreadyExistsException, InvalidValueException {
+        if (student == null) {
+            throw new InvalidValueException("学生信息为空！");
+        }
+        if (student.hasNullField()) {
+            throw new InvalidValueException("学生信息中含有空值：" + student);
+        }
+        if (students.containsKey(student.getStudentId())) {
+            throw new StudentIdAlreadyExistsException(student.getStudentId());
+        }
+
+        students.put(student.getStudentId(), student);
     }
 }

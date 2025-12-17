@@ -1,9 +1,11 @@
 package main.java.cli;
 
+import main.java.cli.command.AddCommand;
 import main.java.cli.command.Command;
 import main.java.cli.command.SearchCommand;
 import main.java.cli.command.UnsupportCommand;
 import main.java.exception.ExitException;
+import main.java.exception.StudentSystemBusinessException;
 import main.java.service.StudentService;
 
 import java.io.IOException;
@@ -58,8 +60,14 @@ public class CommandHandler {
         String op = input.split("\\s+")[0];
         Command command = switch (op) {
             case "search" -> new SearchCommand(studentService);
+            case "add" -> new AddCommand(studentService);
             default -> new UnsupportCommand();
         };
-        command.execute();
+
+        try {
+            command.execute();
+        } catch (StudentSystemBusinessException e) {
+            System.out.println("❌ Error：" + e.getMessage());
+        }
     }
 }
