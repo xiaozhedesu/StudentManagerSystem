@@ -58,6 +58,7 @@ public class CommandHandler {
         Command command = switch (op) {
             case "search" -> new SearchCommand(studentService, input);
             case "add" -> new AddCommand(studentService);
+            case "delete" -> new DeleteCommand(studentService, input);
             case "save" -> new SaveCommand(studentService);
             default -> new UnsupportCommand();
         };

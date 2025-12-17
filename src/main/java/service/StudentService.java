@@ -2,6 +2,8 @@ package main.java.service;
 
 import main.java.exception.InvalidValueException;
 import main.java.exception.StudentIdAlreadyExistsException;
+import main.java.exception.StudentNotFoundException;
+import main.java.exception.StudentSystemBusinessException;
 import main.java.model.Student;
 
 import java.io.*;
@@ -100,5 +102,30 @@ public class StudentService {
         }
 
         students.put(student.getStudentId(), student);
+    }
+
+    /**
+     * 根据学号删除学生信息
+     *
+     * @param student 学生对象
+     * @throws StudentSystemBusinessException 发生业务错误时抛出
+     */
+    public boolean deleteStudentById(Student student) throws StudentSystemBusinessException {
+        if (student == null) {
+            throw new InvalidValueException("学生信息为空！");
+        }
+
+        if (!students.containsKey(student.getStudentId())) {
+            throw new StudentNotFoundException("id: " + student.getStudentId());
+        }
+
+        if (students.get(student.getStudentId()).equals(student)) {
+            students.remove(student.getStudentId());
+        } else {
+            // 只要不给用户自己构造，一般不会触发。
+            throw new StudentSystemBusinessException("删除失败：学生信息匹配失败。");
+        }
+
+        return true;
     }
 }
