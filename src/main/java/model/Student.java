@@ -91,7 +91,7 @@ public class Student implements Serializable {
 
     public void setBirthday(String birthday) throws InvalidDateException {
         if (!DataCheck.isValidDate(birthday)) {
-            throw new InvalidDateException(birthday + "不是一个合格的日期字符串（需要YYYY-MM-DD）");
+            throw new InvalidDateException(birthday + "不是一个合格的日期字符串（需要yyyy-MM-dd）或日期不合法！");
         }
         this.birthday = DateTool.stringToDate(birthday);
     }
@@ -122,6 +122,20 @@ public class Student implements Serializable {
         this.email = email;
     }
 
+    /**
+     * 检查对象中是否含有空值字段
+     *
+     * @return 有至少一项为空返回true， 否则返回false
+     */
+    public boolean hasNullField() {
+        return studentId == null
+                || name == null
+                || sex == null
+                || telephone == null
+                || email == null
+                || birthday == null;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
@@ -129,7 +143,7 @@ public class Student implements Serializable {
                 ", name='" + name + '\'' +
                 ", age=" + age +
                 ", sex='" + sex + '\'' +
-                ", birthday=" + birthday +
+                ", birthday='" + getBirthdayString() + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", eMall='" + email + '\'' +
                 '}';
