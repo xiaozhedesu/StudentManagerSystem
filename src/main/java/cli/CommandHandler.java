@@ -59,7 +59,7 @@ public class CommandHandler {
 
         String op = input.split("\\s+")[0];
         Command command = switch (op) {
-            case "search" -> new SearchCommand(studentService);
+            case "search" -> new SearchCommand(studentService, input);
             case "add" -> new AddCommand(studentService);
             default -> new UnsupportCommand();
         };

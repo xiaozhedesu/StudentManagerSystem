@@ -8,8 +8,9 @@ import java.util.Arrays;
  * 抽象指令类，提供一些共有方法
  */
 public abstract class AbstractCommand {
+    protected final String[] NO_PARAM = new String[0];
     protected final StudentService studentService;
-    protected final String[] param;
+    protected final String[] params;
 
     protected AbstractCommand(StudentService studentService) {
         this(studentService, "");
@@ -17,7 +18,7 @@ public abstract class AbstractCommand {
 
     protected AbstractCommand(StudentService studentService, String input) {
         this.studentService = studentService;
-        this.param = getParam(input);
+        this.params = getParam(input);
     }
 
     /**
@@ -31,6 +32,6 @@ public abstract class AbstractCommand {
         if (inputs.length > 1) {
             return Arrays.copyOfRange(inputs, 1, inputs.length);
         }
-        return new String[0];
+        return NO_PARAM;
     }
 }
