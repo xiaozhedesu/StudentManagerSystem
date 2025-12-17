@@ -1,5 +1,7 @@
 package main.java.util;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.regex.Pattern;
 
 public class DataCheck {
@@ -31,7 +33,15 @@ public class DataCheck {
      */
     public static boolean isValidDate(String date) {
         if (date == null) return false;
-        return DATE_PATTERN.matcher(date).matches();
+        if (!DATE_PATTERN.matcher(date).matches())
+            return false;
+
+        try {
+            LocalDate.parse(date);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 
     /**
@@ -71,5 +81,14 @@ public class DataCheck {
     public static boolean isValidId(String studentId) {
         if (studentId == null) return false;
         return ID_PATTERN.matcher(studentId).matches();
+    }
+
+    /**
+     * 判断字符串是否是数字串
+     * @param str 字符串
+     * @return 如果是数字串返回true，否则返回false
+     */
+    public static boolean isNumString(String str) {
+        return Pattern.compile("-?(0|[1-9]\\d*)").matcher(str).matches();
     }
 }
