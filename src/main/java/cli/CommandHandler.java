@@ -1,9 +1,6 @@
 package main.java.cli;
 
-import main.java.cli.command.AddCommand;
-import main.java.cli.command.Command;
-import main.java.cli.command.SearchCommand;
-import main.java.cli.command.UnsupportCommand;
+import main.java.cli.command.*;
 import main.java.exception.ExitException;
 import main.java.exception.StudentSystemBusinessException;
 import main.java.service.StudentService;
@@ -61,6 +58,7 @@ public class CommandHandler {
         Command command = switch (op) {
             case "search" -> new SearchCommand(studentService, input);
             case "add" -> new AddCommand(studentService);
+            case "save" -> new SaveCommand(studentService);
             default -> new UnsupportCommand();
         };
 
