@@ -7,6 +7,7 @@ import main.java.exception.InvalidValueException;
 import main.java.util.DataCheck;
 import main.java.util.DateTool;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -15,6 +16,8 @@ import java.util.Objects;
  * 学生数据结构类，包含一些数据校验
  */
 public class Student implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1145141919810L;
     private String studentId;
     private String name;
     private int age;

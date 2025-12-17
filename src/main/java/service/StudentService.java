@@ -40,6 +40,10 @@ public class StudentService {
             this.students = (HashMap<String, Student>) ois.readObject();
         } catch (ClassNotFoundException e) {
             this.students = new HashMap<>();
+        } catch (IOException e) {
+            // 保证发生IO错误时不会被调用students导致NPE
+            this.students = new HashMap<>();
+            throw e;
         }
     }
 
@@ -52,6 +56,13 @@ public class StudentService {
         return new HashMap<>(students);
     }
 
+    /**
+     * 添加学生数据
+     *
+     * @param student 学生对象
+     * @throws StudentIdAlreadyExistsException 当列表中存在对应学号的学生时抛出
+     * @throws InvalidValueException           当发生数值错误时抛出
+     */
     public void addStudent(Student student) throws StudentIdAlreadyExistsException, InvalidValueException {
         if (student == null) {
             throw new InvalidValueException("学生信息为空！");
