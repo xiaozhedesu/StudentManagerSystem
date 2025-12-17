@@ -9,6 +9,7 @@ import main.java.util.DateTool;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * 学生数据结构类，包含一些数据校验
@@ -147,5 +148,18 @@ public class Student implements Serializable {
                 ", telephone='" + telephone + '\'' +
                 ", Email='" + email + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Student other)) return false;
+        return Objects.equals(studentId, other.studentId) &&
+                Objects.equals(name, other.name) &&
+                age == other.age &&
+                Objects.equals(sex, other.sex) &&
+                Objects.equals(getBirthdayString(), other.getBirthdayString()) &&
+                Objects.equals(telephone, other.telephone) &&
+                Objects.equals(email, other.email);
     }
 }
