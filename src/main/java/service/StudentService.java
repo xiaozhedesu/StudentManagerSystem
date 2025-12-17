@@ -8,7 +8,11 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StudentService {
     private static final Path STUDENT_DATA_FILE = Paths.get("./student.txt");
@@ -50,10 +54,31 @@ public class StudentService {
     /**
      * 获取学生数据
      *
-     * @return 保存了学生数据的新数组
+     * @return 保存了学生数据的新列表
      */
-    public HashMap<String, Student> getStudentList() {
-        return new HashMap<>(students);
+    public Collection<Student> getStudentList() {
+        return students.values();
+    }
+
+    /**
+     * 按特定字段获取学生数据
+     *
+     * @param fieldName 字段名
+     * @param value     值
+     * @return 筛选后的学生数据列表
+     * @throws InvalidValueException 当字段名不支持的时候抛出
+     */
+    public Collection<Student> getStudentListBy(String fieldName, String value) throws InvalidValueException {
+        if (fieldName == null) throw new InvalidValueException("字段名为空！");
+        if (value == null) throw new InvalidValueException("值为空！");
+        return (switch (fieldName) {
+            case "id" -> Stream.ofNullable(students.get(value));
+            case "name" -> students.values().stream()
+                    .filter(student -> student.getName().equals(value));
+            case "sex" -> students.values().stream()
+                    .filter(student -> student.getSex().equals(value));
+            default -> throw new InvalidValueException("不支持的字段查询：" + fieldName);
+        }).collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**

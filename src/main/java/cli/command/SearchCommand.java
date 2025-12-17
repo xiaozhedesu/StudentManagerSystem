@@ -20,11 +20,11 @@ public class SearchCommand extends AbstractCommand implements Command {
 
     @Override
     public void execute() throws InvalidValueException {
-        HashMap<String, Student> students = studentService.getStudentList();
+        Collection<Student> students = studentService.getStudentList();
 
         // 无参
         if (params == NO_PARAM) {
-            showStudentsInfo(students.values());
+            showStudentsInfo(students);
             return;
         }
 
@@ -39,31 +39,22 @@ public class SearchCommand extends AbstractCommand implements Command {
 
         // 不按字段查询的排序版
         if ("sortBy".equals(params[0])) {
-            showStudentsInfo(students.values().stream()
+            showStudentsInfo(students.stream()
                     .sorted(parseComparator(params[1]))
                     .toList());
             return;
         }
 
         // 按字段查询
-        String fieldName = params[0];
-        String value = params[1];
-        Stream<Student> stream = switch (fieldName) {
-            case "id" -> Stream.ofNullable(students.get(value));
-            case "name" -> students.values().stream()
-                    .filter(student -> student.getName().equals(value));
-            case "sex" -> students.values().stream()
-                    .filter(student -> student.getSex().equals(value));
-            default -> throw new InvalidValueException("不支持的字段查询：" + fieldName);
-        };
+        Collection<Student> list = studentService.getStudentListBy(params[0], params[1]);
 
         // 按字段查找的排序
         if (params.length >= 4 && "sortBy".equals(params[2])) {
-            stream = stream.sorted(parseComparator(params[3]));
+            list = list.stream().sorted(parseComparator(params[3])).toList();
         }
 
         // 按字段查找的输出
-        showStudentsInfo(stream.toList());
+        showStudentsInfo(list);
     }
 
     /**
