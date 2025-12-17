@@ -1,7 +1,7 @@
 package test.java.model;
 
 import main.java.exception.InvalidDateException;
-import main.java.exception.InvalidEMallException;
+import main.java.exception.InvalidEmailException;
 import main.java.exception.InvalidTelephoneException;
 import main.java.exception.InvalidValueException;
 import main.java.model.Student;
@@ -96,10 +96,10 @@ class StudentTest {
     }
 
     @Test
-    @DisplayName("setEmail 非法格式抛 InvalidEMallException")
+    @DisplayName("setEmail 非法格式抛 InvalidEmailException")
     void setEmail_bad() {
         Student stu = new Student();
-        assertThrows(InvalidEMallException.class, () -> stu.setEmail("abc@"));
+        assertThrows(InvalidEmailException.class, () -> stu.setEmail("abc@"));
     }
 
     /* ---------- 6. 序列化/反序列化 ---------- */

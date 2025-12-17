@@ -1,6 +1,6 @@
 package main.java.exception;
 
-public class InvalidTelephoneException extends InvalidValueException{
+public class InvalidTelephoneException extends InvalidValueException {
     public InvalidTelephoneException() {
         super("电话格式错误！");
     }

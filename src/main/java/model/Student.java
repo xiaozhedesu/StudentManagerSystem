@@ -1,7 +1,7 @@
 package main.java.model;
 
 import main.java.exception.InvalidDateException;
-import main.java.exception.InvalidEMallException;
+import main.java.exception.InvalidEmailException;
 import main.java.exception.InvalidTelephoneException;
 import main.java.exception.InvalidValueException;
 import main.java.util.DataCheck;
@@ -115,9 +115,9 @@ public class Student implements Serializable {
         return email;
     }
 
-    public void setEmail(String email) throws InvalidEMallException {
+    public void setEmail(String email) throws InvalidEmailException {
         if (!DataCheck.isValidEmail(email)) {
-            throw new InvalidEMallException("示例：yourEmallName@example.com");
+            throw new InvalidEmailException("示例：yourEmailName@example.com");
         }
         this.email = email;
     }
@@ -145,7 +145,7 @@ public class Student implements Serializable {
                 ", sex='" + sex + '\'' +
                 ", birthday='" + getBirthdayString() + '\'' +
                 ", telephone='" + telephone + '\'' +
-                ", eMall='" + email + '\'' +
+                ", Email='" + email + '\'' +
                 '}';
     }
 }

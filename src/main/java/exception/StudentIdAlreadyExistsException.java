@@ -1,6 +1,6 @@
 package main.java.exception;
 
-public class StudentIdAlreadyExistsException extends StudentSystemBusinessException{
+public class StudentIdAlreadyExistsException extends StudentSystemBusinessException {
     public StudentIdAlreadyExistsException() {
         super("已存在相同学号的学生信息！");
     }

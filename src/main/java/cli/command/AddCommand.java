@@ -18,7 +18,7 @@ public class AddCommand extends AbstractCommand implements Command {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("请在一行中输入学生的信息，不同的字段使用空格分隔。\n"
-                + "对应顺序：（学号，姓名，年龄，性别，生日，电话，emall）");
+                + "对应顺序：（学号，姓名，年龄，性别，生日，电话，email）");
         String input = scanner.nextLine();
         String[] params = input.split("\\s+");
         if (params.length != 7) {
