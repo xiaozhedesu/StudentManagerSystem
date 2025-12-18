@@ -43,6 +43,6 @@ public class DeleteCommand extends AbstractCommand implements Command {
                 fail += 1;
             }
         }
-        System.out.printf("✅ 删除成功 %d 项，失败 %d 项。\n", success, fail);
+        System.out.printf("%s 删除成功 %d 项，失败 %d 项。\n", fail == 0 ? "✅" : "❌", success, fail);
     }
 }

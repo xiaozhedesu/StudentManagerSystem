@@ -5,6 +5,7 @@ import main.java.exception.StudentIdAlreadyExistsException;
 import main.java.exception.StudentNotFoundException;
 import main.java.exception.StudentSystemBusinessException;
 import main.java.model.Student;
+import main.java.util.DataCheck;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -105,12 +106,11 @@ public class StudentService {
     }
 
     /**
-     * 根据学生对象删除学生信息
-     *
+     * 确保学生对象存在于列表中
      * @param student 学生对象
-     * @throws StudentSystemBusinessException 发生业务错误时抛出
+     * @throws StudentSystemBusinessException 不存在此学生数据时抛出
      */
-    public boolean deleteStudent(Student student) throws StudentSystemBusinessException {
+    private void ensureStudentInList(Student student) throws StudentSystemBusinessException {
         if (student == null) {
             throw new InvalidValueException("学生信息为空！");
         }
@@ -119,12 +119,56 @@ public class StudentService {
             throw new StudentNotFoundException("id: " + student.getStudentId());
         }
 
-        if (students.get(student.getStudentId()).equals(student)) {
-            students.remove(student.getStudentId());
-        } else {
-            // 只要不给用户自己构造，一般不会触发。
-            throw new StudentSystemBusinessException("删除失败：学生信息匹配失败。");
+        if (!students.get(student.getStudentId()).equals(student)) {
+            throw new StudentSystemBusinessException("学生信息匹配失败：" + student + "与列表中的学生数据不一致！");
         }
+    }
+
+    /**
+     * 根据学生对象删除学生信息
+     *
+     * @param student 学生对象
+     * @throws StudentSystemBusinessException 发生业务错误时抛出
+     */
+    public boolean deleteStudent(Student student) throws StudentSystemBusinessException {
+        ensureStudentInList(student);
+
+        students.remove(student.getStudentId());
+
+        return true;
+    }
+
+    /**
+     * 按照给定键值对修改传入的学生信息
+     *
+     * @param student 学生对象
+     * @param fieldName 阻断名
+     * @param value 值
+     * @return 修改成功返回true
+     * @throws StudentSystemBusinessException 发生业务错误时抛出
+     */
+    public boolean changeStudent(Student student, String fieldName, String value) throws StudentSystemBusinessException {
+        ensureStudentInList(student);
+
+        Student newStudent = new Student(student);
+        switch (fieldName) {
+            case "name" -> newStudent.setName(value);
+            case "age" -> {
+                if (!DataCheck.isNumString(value)) {
+                    throw new InvalidValueException("年龄不是数字！");
+                }
+                newStudent.setAge(Integer.parseInt(value));
+            }
+            case "sex" -> newStudent.setSex(value);
+            case "birthday" -> newStudent.setBirthday(value);
+            case "telephone" -> newStudent.setTelephone(value);
+            case "email" -> newStudent.setEmail(value);
+            case "id" -> throw new InvalidValueException("不支持修改id！");
+            default -> throw new StudentSystemBusinessException("不支持的操作，请重试。");
+        }
+
+        students.remove(student.getStudentId());
+        students.put(newStudent.getStudentId(), newStudent);
 
         return true;
     }

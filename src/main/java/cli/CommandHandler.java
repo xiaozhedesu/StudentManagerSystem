@@ -59,6 +59,7 @@ public class CommandHandler {
             case "search" -> new SearchCommand(studentService, input);
             case "add" -> new AddCommand(studentService);
             case "delete" -> new DeleteCommand(studentService, input);
+            case "change" -> new ChangeCommand(studentService, input);
             case "load" -> new LoadCommand(studentService);
             case "save" -> new SaveCommand(studentService);
             default -> new UnsupportCommand();
