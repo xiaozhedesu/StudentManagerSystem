@@ -56,6 +56,7 @@ public class CommandHandler {
 
         String op = input.split("\\s+")[0];
         Command command = switch (op) {
+            case "help" -> new HelpCommand(studentService, input);
             case "search" -> new SearchCommand(studentService, input);
             case "add" -> new AddCommand(studentService, input);
             case "delete" -> new DeleteCommand(studentService, input);
