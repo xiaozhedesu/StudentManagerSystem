@@ -105,12 +105,12 @@ public class StudentService {
     }
 
     /**
-     * 根据学号删除学生信息
+     * 根据学生对象删除学生信息
      *
      * @param student 学生对象
      * @throws StudentSystemBusinessException 发生业务错误时抛出
      */
-    public boolean deleteStudentById(Student student) throws StudentSystemBusinessException {
+    public boolean deleteStudent(Student student) throws StudentSystemBusinessException {
         if (student == null) {
             throw new InvalidValueException("学生信息为空！");
         }

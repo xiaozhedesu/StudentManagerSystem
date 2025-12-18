@@ -37,7 +37,7 @@ public class DeleteCommand extends AbstractCommand implements Command {
         int success = 0, fail = 0;
         for (Student student : students) {
             try {
-                success += studentService.deleteStudentById(student) ? 1 : 0;
+                success += studentService.deleteStudent(student) ? 1 : 0;
             } catch (StudentSystemBusinessException e) {
                 System.out.println("❌ 删除失败：" + e.getMessage());
                 fail += 1;
