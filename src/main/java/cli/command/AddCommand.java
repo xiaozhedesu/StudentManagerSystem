@@ -13,14 +13,24 @@ public class AddCommand extends AbstractCommand implements Command {
         super(studentService);
     }
 
+    public AddCommand(StudentService studentService, String input) {
+        super(studentService, input);
+    }
+
     @Override
     public void execute() throws StudentSystemBusinessException {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("请在一行中输入学生的信息，不同的字段使用空格分隔。\n"
-                + "对应顺序：（学号，姓名，年龄，性别，生日，电话，email）");
-        String input = scanner.nextLine();
-        String[] params = input.split("\\s+");
+        String[] params;
+        if (this.params == NO_PARAM) {
+            System.out.println("请在一行中输入学生的信息，不同的字段使用空格分隔。\n"
+                    + "对应顺序：（学号，姓名，年龄，性别，生日，电话，email）");
+            String input = scanner.nextLine();
+            params = input.split("\\s+");
+        } else {
+            params = this.params;
+        }
+
         if (params.length != 7) {
             throw new InvalidValueException("传入参数过多或过少：应有 7 但是现在有 " + params.length + "！");
         }
