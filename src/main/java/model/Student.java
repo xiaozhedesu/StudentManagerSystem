@@ -48,6 +48,21 @@ public class Student implements Serializable {
         setEmail(email);
     }
 
+    /**
+     * 复制构造 —— 通过别的学生对象构建新的对象
+     */
+    public Student(Student other) throws InvalidValueException {
+        this(
+                other.getStudentId(),
+                other.getName(),
+                other.getAge(),
+                other.getSex(),
+                other.getBirthdayString(),
+                other.getTelephone(),
+                other.getEmail()
+        );
+    }
+
     public String getStudentId() {
         return studentId;
     }
@@ -90,7 +105,7 @@ public class Student implements Serializable {
     }
 
     public Date getBirthday() {
-        return birthday;
+        return new Date(birthday.getTime());
     }
 
     public void setBirthday(String birthday) throws InvalidDateException {
