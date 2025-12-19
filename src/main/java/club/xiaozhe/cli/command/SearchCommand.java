@@ -81,7 +81,7 @@ public class SearchCommand extends AbstractCommand implements Command {
         return switch (key) {
             case "name" -> Comparator.comparing(Student::getName);
             case "sex" -> Comparator.comparing(Student::getSex);
-            case "birthday" -> Comparator.comparing(student -> LocalDate.parse(student.getBirthdayString()));
+            case "birthday" -> Comparator.comparing(student -> LocalDate.parse(student.getBirthday()));
             default -> Comparator.comparing(Student::getStudentId);
         };
     }

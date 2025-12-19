@@ -6,6 +6,8 @@ import club.xiaozhe.exception.StudentNotFoundException;
 import club.xiaozhe.exception.StudentSystemBusinessException;
 import club.xiaozhe.model.Student;
 import club.xiaozhe.util.DataCheck;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -14,12 +16,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StudentService {
-    private static final Path STUDENT_DATA_FILE = Paths.get("./student.txt");
-    private HashMap<String, Student> students;
+    private static final Path STUDENT_DATA_FILE = Paths.get("./student.json");
+    private final HashMap<String, Student> students = new HashMap<>();
 
     /**
      * 从指定文件读取学生数据
@@ -27,9 +30,9 @@ public class StudentService {
      * @throws IOException 发生IO错误时抛出
      */
     public void saveStudentList() throws IOException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(STUDENT_DATA_FILE.toFile()))) {
-            oos.writeObject(students);
-        }
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writerWithDefaultPrettyPrinter()
+                .writeValue(STUDENT_DATA_FILE.toFile(), students.values());
     }
 
     /**
@@ -37,20 +40,16 @@ public class StudentService {
      *
      * @throws IOException 发生IO错误时抛出
      */
-    @SuppressWarnings("unchecked")
     public void loadStudentList() throws IOException {
-        if (!Files.exists(STUDENT_DATA_FILE)) {
-            this.students = new HashMap<>();
-            return;
-        }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(STUDENT_DATA_FILE.toFile()))) {
-            this.students = (HashMap<String, Student>) ois.readObject();
-        } catch (ClassNotFoundException e) {
-            this.students = new HashMap<>();
-        } catch (IOException e) {
-            // 保证发生IO错误时不会被调用students导致NPE
-            this.students = new HashMap<>();
-            throw e;
+        if (!Files.exists(STUDENT_DATA_FILE)) return;
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<Student> list = mapper.readValue(STUDENT_DATA_FILE.toFile(), new TypeReference<List<Student>>() {
+        });
+
+        this.students.clear();
+        for (Student student : list) {
+            this.students.put(student.getStudentId(), student);
         }
     }
 

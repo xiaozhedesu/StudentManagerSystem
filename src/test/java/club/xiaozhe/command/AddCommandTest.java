@@ -51,7 +51,7 @@ class AddCommandTest {
         assertEquals("张三", s.getName());
         assertEquals(18, s.getAge());
         assertEquals("男", s.getSex());
-        assertEquals(LocalDate.parse("2005-06-15"), LocalDate.parse(s.getBirthdayString()));
+        assertEquals(LocalDate.parse("2005-06-15"), LocalDate.parse(s.getBirthday()));
         assertEquals("13800138000", s.getTelephone());
         assertEquals("zhangsan@foo.com", s.getEmail());
     }

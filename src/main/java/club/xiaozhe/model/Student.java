@@ -5,24 +5,18 @@ import club.xiaozhe.exception.InvalidEmailException;
 import club.xiaozhe.exception.InvalidTelephoneException;
 import club.xiaozhe.exception.InvalidValueException;
 import club.xiaozhe.util.DataCheck;
-import club.xiaozhe.util.DateTool;
 
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
 /**
  * 学生数据结构类，包含一些数据校验
  */
-public class Student implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1145141919810L;
+public class Student {
     private String studentId;
     private String name;
     private int age;
     private String sex;
-    private Date birthday;
+    private String birthday;
     private String telephone;
     private String email;
 
@@ -57,7 +51,7 @@ public class Student implements Serializable {
                 other.getName(),
                 other.getAge(),
                 other.getSex(),
-                other.getBirthdayString(),
+                other.getBirthday(),
                 other.getTelephone(),
                 other.getEmail()
         );
@@ -104,19 +98,15 @@ public class Student implements Serializable {
         this.sex = sex;
     }
 
-    public Date getBirthday() {
-        return new Date(birthday.getTime());
+    public String getBirthday() {
+        return birthday;
     }
 
     public void setBirthday(String birthday) throws InvalidDateException {
         if (!DataCheck.isValidDate(birthday)) {
             throw new InvalidDateException(birthday + "不是一个合格的日期字符串（需要yyyy-MM-dd）或日期不合法！");
         }
-        this.birthday = DateTool.stringToDate(birthday);
-    }
-
-    public String getBirthdayString() {
-        return DateTool.dateToString(birthday);
+        this.birthday = birthday;
     }
 
     public String getTelephone() {
@@ -162,7 +152,7 @@ public class Student implements Serializable {
                 ", name='" + name + '\'' +
                 ", age=" + age +
                 ", sex='" + sex + '\'' +
-                ", birthday='" + getBirthdayString() + '\'' +
+                ", birthday='" + birthday + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", Email='" + email + '\'' +
                 '}';
@@ -176,7 +166,7 @@ public class Student implements Serializable {
                 Objects.equals(name, other.name) &&
                 age == other.age &&
                 Objects.equals(sex, other.sex) &&
-                Objects.equals(getBirthdayString(), other.getBirthdayString()) &&
+                Objects.equals(birthday, other.birthday) &&
                 Objects.equals(telephone, other.telephone) &&
                 Objects.equals(email, other.email);
     }

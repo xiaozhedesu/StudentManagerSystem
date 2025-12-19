@@ -4,13 +4,9 @@ import club.xiaozhe.exception.InvalidDateException;
 import club.xiaozhe.exception.InvalidEmailException;
 import club.xiaozhe.exception.InvalidTelephoneException;
 import club.xiaozhe.exception.InvalidValueException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,7 +52,7 @@ class StudentTest {
     void setBirthday_ok() throws Exception {
         Student stu = new Student();
         stu.setBirthday("2000-12-15");
-        assertEquals("2000-12-15", stu.getBirthdayString());
+        assertEquals("2000-12-15", stu.getBirthday());
     }
 
     @Test
@@ -101,10 +97,9 @@ class StudentTest {
         assertThrows(InvalidEmailException.class, () -> stu.setEmail("abc@"));
     }
 
-    /* ---------- 6. 序列化/反序列化 ---------- */
     @Test
-    @DisplayName("Serializable 一轮后内容不变")
-    void serialization_roundTrip() throws Exception {
+    @DisplayName("Jackson JSON 一轮后内容不变")
+    void json_roundTrip() throws Exception {
         Student src = new Student(
                 "20231145141",
                 "Alice",
@@ -114,25 +109,19 @@ class StudentTest {
                 "13911112222",
                 "alice@qq.com");
 
-        // 写
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        try (ObjectOutputStream oos = new ObjectOutputStream(bos)) {
-            oos.writeObject(src);
-        }
+        // 对象 -> JSON 字节
+        ObjectMapper mapper = new ObjectMapper();
+        byte[] jsonBytes = mapper.writeValueAsBytes(src);
 
-        // 读
-        ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
-        Student dst;
-        try (ObjectInputStream ois = new ObjectInputStream(bis)) {
-            dst = (Student) ois.readObject();
-        }
+        // JSON 字节 -> 对象
+        Student dst = mapper.readValue(jsonBytes, Student.class);
 
         // 断言
         assertEquals(src.getStudentId(), dst.getStudentId());
         assertEquals(src.getName(), dst.getName());
         assertEquals(src.getAge(), dst.getAge());
         assertEquals(src.getSex(), dst.getSex());
-        assertEquals(src.getBirthdayString(), dst.getBirthdayString());
+        assertEquals(src.getBirthday(), dst.getBirthday());
         assertEquals(src.getTelephone(), dst.getTelephone());
         assertEquals(src.getEmail(), dst.getEmail());
     }
